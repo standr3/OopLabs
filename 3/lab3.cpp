@@ -26,7 +26,7 @@ public:
 
 class Produs
 {
-	//private; protected; public
+
 	char* denumire;
 	int nrPreturi;
 	float* istoricPreturi;
