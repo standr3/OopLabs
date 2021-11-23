@@ -1,4 +1,3 @@
-
 #include<iostream>
 using namespace std;
 
@@ -13,25 +12,28 @@ private:
 
 public:
 
-	Student() :nume("NA"), nrNote(0), note(NULL), nrMatricol(0), soldCont(0)
+	Student() : nrMatricol(0)
 	{
+		nume = "NA";
+		nrNote = 0;
+		note = NULL;
+		soldCont = 0;
 	}
 
-	Student(string nume, int nrNote, int* note, int nrMatricol, float soldCont) :nume(nume), nrMatricol(nrMatricol), soldCont(soldCont)
+	Student(string _nume, int _nrNote, int* _note, int _nrMatricol, float _soldCont) 
+		: nume(_nume), nrMatricol(_nrMatricol), soldCont(_soldCont)
 	{
-
-
-		if (note != NULL && nrNote != 0)
+		if (_note != NULL && _nrNote != 0)
 		{
-			this->note = new int[nrNote];
-			this->nrNote = nrNote;
-			for (int i = 0; i < this->nrNote; i++)
-				this->note[i] = note[i];
+			note = new int[_nrNote];
+			nrNote = _nrNote;
+			for (int i = 0; i < nrNote; i++)
+				note[i] = _note[i];
 		}
 		else
 		{
-			this->note = NULL;
-			this->nrNote = 0;
+			note = NULL;
+			nrNote = 0;
 		}
 	}
 
@@ -39,15 +41,15 @@ public:
 	{
 		if (s.note != NULL && s.nrNote != 0)
 		{
-			this->note = new int[s.nrNote];
-			this->nrNote = s.nrNote;
-			for (int i = 0; i < this->nrNote; i++)
-				this->note[i] = s.note[i];
+			note = new int[s.nrNote];
+			nrNote = s.nrNote;
+			for (int i = 0; i < nrNote; i++)
+				note[i] = s.note[i];
 		}
 		else
 		{
-			this->note = NULL;
-			this->nrNote = 0;
+			note = NULL;
+			nrNote = 0;
 		}
 	}
 
