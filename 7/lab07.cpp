@@ -2,11 +2,6 @@
 #include<iostream>
 using namespace std;
 
-//TEMA: pe clasa Masina de implementat: << si >>, op functie ( 2 ex), op comparatie ( 2 ex), !
-
-//! == functie
-// << si >>
-
 class Student
 {
 private:
