@@ -1,32 +1,9 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 using namespace std;
 
-//implementare clasa; constructor fara param; cu toti param;
-//metoda de afisare; metode tip accesor (get si set)
-
-//TEMA
-class TichetTransport
-{
-private:
-	char* sistemTransportPublic; //metrou sau STB sau ...
-	bool esteAbonament; //true sau false
-	int nrCalatorii;
-	int nrLuni;
-	int* istoricCalatorii;//istoricul nr de calatorii pentru ultimele nrLuni luni
-	char numeUtilizator[100];
-
-public:
-	//TO DO
-	//constructor fara param
-	//constructor cu param
-	//constructor cu mai putini parametri
-	//metoda afisare
-	// metode accesor pentru fiecare atribut privat
-};
-
 class Produs
 {
-
 	char* denumire;
 	int nrPreturi;
 	float* istoricPreturi;
@@ -34,140 +11,178 @@ class Produs
 	int stoc;
 public:
 	bool estePerisabil;
-
-	Produs()//constructor fara parametri
+	Produs()
 	{
-		//rol: alocare zona memorie + initializare
 		this->denumire = NULL;
 		this->nrPreturi = 0;
 		this->istoricPreturi = NULL;
-		strcpy(this->unitateMasura, "NA");
+		strcpy(unitateMasura, "NA");
 		this->stoc = 0;
-		this->estePerisabil = true;
+		this->estePerisabil = false;
 	}
-
-	Produs(char* denumire, int nrPreturi, float* istoricPreturi, char* unitateMasura, int stoc, bool estePerisabil)
+	Produs(char* _denumire, int _nrPreturi, float* _istoricPreturi, char* _unitateMasura, int _stoc,
+		bool _estePerisabil)
 	{
-		if (denumire != NULL)
+		if (_denumire)
 		{
-			this->denumire = new char[strlen(denumire) + 1];
-			strcpy(this->denumire, denumire);
+			this->denumire = new char[strlen(_denumire) + 1];
+			strcpy(this->denumire, _denumire);
 		}
 		else
-			this->denumire = NULL;
-		if (istoricPreturi != NULL && nrPreturi != 0)
 		{
-			this->nrPreturi = nrPreturi;
-			//1 deep copy
-			this->istoricPreturi = new float[nrPreturi];
+			this->denumire = NULL;
+		}
+
+		if (_nrPreturi > 0 && _istoricPreturi != NULL)
+		{
+			this->nrPreturi = _nrPreturi;
+			this->istoricPreturi = new float[this->nrPreturi + 1];
 			for (int i = 0; i < this->nrPreturi; i++)
-				this->istoricPreturi[i] = istoricPreturi[i];
-			//2 shallow copy
-			//this->istoricPreturi = istoricPreturi; DO NOT
-			//3 DO NOT
-			//this->istoricPreturi = new float[nrPreturi];
-			//this->istoricPreturi = istoricPreturi;
-		}
-		else
-		{
-			this->istoricPreturi = NULL;
-			this->nrPreturi = 0;
-		}
-		if (unitateMasura != NULL)
-		{
-			strcpy(this->unitateMasura, unitateMasura);
-		}
-		else
-			strcpy(this->unitateMasura, "NA");
-		this->stoc = stoc;
-		this->estePerisabil = estePerisabil;
-	}
-
-	Produs(char* denumire, int stoc)
-	{
-		if (denumire != NULL)
-		{
-			this->denumire = new char[strlen(denumire) + 1];
-			strcpy(this->denumire, denumire);
-		}
-		else
-			this->denumire = NULL;
-		this->stoc = stoc;
-		//nu uitam si de celelalte atribute
-		this->nrPreturi = 0;
-		this->istoricPreturi = NULL;
-		this->estePerisabil = true;
-		strcpy(this->unitateMasura, "NA");
-	}
-
-	void afisare() {
-		cout << "Denumire: ";
-		if (this->denumire == NULL) {
-			cout << "Anonim" << endl;
-		}
-		else {
-			cout << this->denumire << endl;
-		}
-		cout << "Stoc: " << this->stoc << endl;
-		cout << "Este perisabil: ";
-		if (this->estePerisabil == true) {
-			cout << "DA" << endl;
-		}
-		else {
-			cout << "NU" << endl;
-		}
-		cout << "Unitate de masura: " << this->unitateMasura << endl;
-		cout << "Istoric Preturi: ";
-		if (this->nrPreturi == 0)
-			cout << "Fara istoric preturi";
-		else
-		{
-			for (int i = 0; i < this->nrPreturi; i++) {
-				cout << this->istoricPreturi[i] << " ";
+			{
+				this->istoricPreturi[i] = _istoricPreturi[i];
 			}
 		}
-		cout << endl;
-	}
-
-	//metode accesor de tip get si set
-	//atribut denumire
-	void setDenumire(const char* denumire)
-	{
-		//obj this deja exista
-		delete[] this->denumire;//pentru a evita memory leaks(zona de memorie alocata care nu a fost dezalocata)
-		if (denumire != NULL)
+		else
 		{
-			this->denumire = new char[strlen(denumire) + 1];
-			strcpy(this->denumire, denumire);
+			this->nrPreturi = 0;
+			this->istoricPreturi = NULL;
+		}
+
+		if (_unitateMasura)
+		{
+			strcpy(this->unitateMasura, _unitateMasura);
 		}
 		else
-			this->denumire = NULL;
-	}
+		{
+			strcpy(this->unitateMasura, "NA");
+		}
 
-	char* getDenumire()
+		this->stoc = _stoc;
+		this->estePerisabil = _estePerisabil;
+	}
+	Produs(const Produs& p)
 	{
-		return this->denumire;
-	}
+		if (p.denumire)
+		{
+			this->denumire = new char[strlen(p.denumire) + 1];
+			strcpy(this->denumire, p.denumire);
+		}
+		else
+		{
+			this->denumire = NULL;
+		}
 
+		if (p.nrPreturi > 0 && p.istoricPreturi != NULL)
+		{
+			this->nrPreturi = p.nrPreturi;
+			this->istoricPreturi = new float[this->nrPreturi];
+			for (int i = 0; i < this->nrPreturi; i++)
+			{
+				this->istoricPreturi[i] = p.istoricPreturi[i];
+			}
+		}
+		else {
+			this->nrPreturi = 0;
+			this->istoricPreturi = NULL;
+		}
+		if (p.unitateMasura)
+		{
+			strcpy(this->unitateMasura, p.unitateMasura);
+		}
+		else
+		{
+			strcpy(this->unitateMasura, "NA");
+		}
+		this->stoc = p.stoc;
+		this->estePerisabil = p.estePerisabil;
+	}
+	~Produs()
+	{
+		if (this->denumire) delete[] this->denumire;
+		if (this->istoricPreturi) delete[] this->istoricPreturi;
+	}
+	friend ostream& operator<< (ostream& os, Produs& p)
+	{
+		if (p.denumire != NULL)
+		{
+			os << "Denumire: " << p.denumire << "; ";
+		}
+		os << "NrPreturi: " << p.nrPreturi;
+		if (p.nrPreturi > 0 && p.istoricPreturi != NULL) 
+		{
+			os << "; Preturi";
+			for (int i = 0; i < p.nrPreturi; ++i)
+			{
+				os << p.istoricPreturi[i] << ", ";
+			}
+		}
+		os << "; UnitateMasura: "	<< p.unitateMasura;
+		os << "; Stoc: "			<< p.stoc;
+		os << "; EstePerisabil: "	<< p.estePerisabil;
+		return os;
+	}
+	/*friend istream& operator>> (istream& is, Produs& p)
+	{
+		cout << "Denumire: "; is >> p.denumire;
+		cout << "NrPreturi: "; is >> p.nrPreturi;
+
+		if (p.istoricPreturi) delete[] p.istoricPreturi;
+
+		if (p.nrPreturi > 0) 
+		{
+			p.istoricPreturi = new float[p.nrPreturi];
+			cout << "Preturi: \n";
+			for (int i = 0; i < p.nrPreturi; ++i)
+			{
+				cout << "[" << i << "]"; is >> p.istoricPreturi[i];
+			}
+		}
+		else
+		{
+			p.nrPreturi = 0;
+			p.istoricPreturi = NULL;
+		}
+		cout << "UnitateMasura: "; is >> p.unitateMasura;
+		cout << "Stoc: "; is >> p.stoc;
+		cout << "EstePerisabil: "; is >> p.estePerisabil;
+		return is;
+	}*/
+	void setDenumire(const char* _denumire) 
+	{
+		if (denumire) delete[] denumire;
+
+		if (_denumire) 
+		{
+			denumire = new char[strlen(_denumire) + 1];
+			strcpy(denumire, _denumire);
+		}
+		else
+		{
+			denumire = NULL;
+		}
+	}
+	char* getDenumire() { return denumire; }
+	
 };
 
 int main()
 {
-	char denumire[] = "Biscuit";
-	float preturi[] = { 12.4, 12, 15, 14.5 };
+	char denumire1[] = "Biscuit";
+	float preturi1[] = { 12.4, 12, 15, 14.5 };
 	char unitateMasura[] = "Buc";
-	Produs p;//constructor default
-	//sizeof(p)
-	Produs p2(denumire, 4, preturi, unitateMasura, 125, false);//constructor cu toti parametri
-	p.afisare();
-	p2.afisare();
-	Produs p3(denumire, 10);
-	//modificari pe obiecte
-	//ptr atribute public
+	
+	Produs p1; 
+	Produs p2(denumire1, 4, preturi1, unitateMasura, 125, false);
+	
+	cout << p1 << endl;
+	cout << p2 << endl;
+
+	Produs p3;
+	p3.setDenumire(denumire1);
 	p3.estePerisabil = false;
-	cout << endl << p3.estePerisabil;
-	//ptr atribute private
-	p3.setDenumire("Biscuitel");
-	cout << endl<<p3.getDenumire();
+	cout << p3.getDenumire() << endl;
+	cout << p3 <<endl;
+	/*cin >> p3;*/
+	cout << endl << p3;
 	return 0;
 }
