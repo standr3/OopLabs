@@ -1,34 +1,6 @@
-
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 using namespace std;
-
-//operatori: ++ pre si post,+, +=, cast []
-
-enum TipCarburant
-{
-	BENZINA, DIESEL, ELECTRIC
-};
-//TEMA. Ptr clasa Masina: constructori, op=, destructor, meth afisare, supraincarcare op: +, -, /, *, ++, --, [], cast 2 ex, +=, -=
-//mentiune: cel putin 3 supraincarcari de op sa realizeze modificari pe dimensiunea vectorului alimentare (seminar 2)
-//ex: m2 = m+1 => m2 va detine o alimentare in plus fara de m(se dubleaza ultima alimentare)
-//ex2: m2 -= 3;//elimina ultimele 3 alimentari ( puteti adauga exception)
-//TEMA OPTIONALA: de implementat un return ptr vectorul alimentare ( safe) ( de tip consultare doar, nu si modificare)
-//TEMA OPTIONALA 2: transfer const Masina& m intr-o metoda implementata ofera siguranta totala obj m? Sau pot sa modific pe m intr-o anumita forma
-
-
-class Masina
-{
-private:
-	string numeProprietar;
-	TipCarburant tipCarburant;
-	const int anFabricatie;
-	int* alimentare; //dim vector este nrAlimentari (nr litri per alimentare)
-	int nrAlimentari;
-	static int nrMasiniBenzina;
-	static int nrMasiniDiesel;
-	static int nrMasiniElectric;
-	float pretAchizitie;
-};
 
 class Student
 {
@@ -41,68 +13,67 @@ private:
 
 public:
 
-	Student() :nume("NA"), nrNote(0), note(NULL), nrMatricol(0), soldCont(0)
+	Student() : nrMatricol(0)
 	{
-		//cout << "\nAPEL CONSTR FARA PARAM";
+		nume = "NA";
+		nrNote = 0;
+		note = NULL;
+		soldCont = 0;
 	}
 
-	Student(string nume, int nrNote, int* note, int nrMatricol, float soldCont) :nume(nume), nrMatricol(nrMatricol), soldCont(soldCont)
+	Student(string _nume, int _nrNote, int* _note, int _nrMatricol, float _soldCont) 
+		: nume(_nume), nrMatricol(_nrMatricol), soldCont(_soldCont)
 	{
-
-		//cout << "\nAPEL CONSTR CU PARAM";
-		if (note != NULL && nrNote != 0)
+		if (_note != NULL && _nrNote != 0)
 		{
-			this->note = new int[nrNote];
-			this->nrNote = nrNote;
-			for (int i = 0; i < this->nrNote; i++)
-				this->note[i] = note[i];
+			note = new int[_nrNote];
+			nrNote = _nrNote;
+			for (int i = 0; i < nrNote; i++)
+				note[i] = _note[i];
 		}
 		else
 		{
-			this->note = NULL;
-			this->nrNote = 0;
+			note = NULL;
+			nrNote = 0;
 		}
 	}
 
 	Student(const Student& s) :nume(s.nume), nrMatricol(s.nrMatricol), soldCont(s.soldCont)
 	{
-		//cout << "\nAPEL CONSTR COPIERE";
 		if (s.note != NULL && s.nrNote != 0)
 		{
-			this->note = new int[s.nrNote];
-			this->nrNote = s.nrNote;
-			for (int i = 0; i < this->nrNote; i++)
-				this->note[i] = s.note[i];
+			note = new int[s.nrNote];
+			nrNote = s.nrNote;
+			for (int i = 0; i < nrNote; i++)
+				note[i] = s.note[i];
 		}
 		else
 		{
-			this->note = NULL;
-			this->nrNote = 0;
+			note = NULL;
+			nrNote = 0;
 		}
 	}
-
 
 	Student& operator=(const Student& s)
 	{
-		this->nume = s.nume;
-		this->soldCont = s.soldCont;
-		delete[] this->note;
+		nume = s.nume;
+		soldCont = s.soldCont;
+		if (note) delete[] note;
 		if (s.note != NULL && s.nrNote != 0)
 		{
-			this->note = new int[s.nrNote];
-			this->nrNote = s.nrNote;
-			for (int i = 0; i < this->nrNote; i++)
-				this->note[i] = s.note[i];
+			note = new int[s.nrNote];
+			nrNote = s.nrNote;
+			for (int i = 0; i < nrNote; i++)
+				note[i] = s.note[i];
 		}
 		else
 		{
-			this->note = NULL;
-			this->nrNote = 0;
+			note = NULL;
+			nrNote = 0;
 		}
 		return *this;
 	}
-
-	Student operator+(float sold)//this-ul inghite primul operand de tip Student
+	Student operator+(float sold)
 	{
 		Student rez = *this;
 		rez.soldCont += sold;
@@ -111,45 +82,32 @@ public:
 
 	Student& operator+=(float sold)
 	{
-		this->soldCont += sold;
+		soldCont += sold;
 		return *this;
 	}
-
 	//forma de preincrementare
 	Student& operator++()
 	{
-		//modif obj this
-		//returnez obj modificat
-		this->soldCont++;
+		soldCont++;
 		return *this;
 	}
-
 	//forma de postincrementare
 	Student operator++(int)
 	{
-		//returnam obj initial si apoi face modificare pe obj this
 		Student copie = *this;
-		this->soldCont++;
+		soldCont++;
 		return copie;
 	}
-
 	int& operator[](int index)
 	{
-		//de adaugat validari + throw exception
-		return this->note[index];
+		if (index >= 0 && index < nrNote)
+			return this->note[index];
+		else
+			throw exception("index invalid");
 	}
+	operator string() { return this->nume; }
 
-	//cast la string
-	operator string()
-	{
-		return this->nume;
-	}
-
-	//conversia se va face doar la cerere prin explicit
-	explicit operator float()
-	{
-		return this->soldCont;
-	}
+	explicit operator float() { return this->soldCont; }
 
 	void afisare()
 	{
@@ -165,39 +123,25 @@ public:
 
 	~Student()
 	{
-		//cout << "\nAPEL DESTRUCTOR";
-		//if (this->note != NULL)
-		delete[] this->note;
+		if (note) delete[] this->note;
 	}
 
-	friend Student operator+(float sold, Student s);
+	friend Student operator+(float sold, Student s) { return s + sold; }
 };
 
-Student operator+(float sold, Student s)
-{
-	/*Student rez = s;
-	rez.soldCont += sold;
-	return rez;*/
-
-	/*s.soldCont += sold;
-	return s;*/
-
-	return s + sold;
-}
 
 int main()
 {
-	//double = student + double 
 	int note[] = { 10,4,6 };
 	Student s("Gigel", 3, note, 102, 100.5);
 	s.afisare();
 
 	Student s2;
-	s2 = s + 10.0; //Student + float
+	s2 = s + 10.0; 
 	s2.afisare();
 	s.afisare();
 
-	s2 = 10.0f + s; //float + Student
+	s2 = 10.0f + s;
 	s2.afisare();
 	s.afisare();
 
@@ -212,25 +156,19 @@ int main()
 	s.afisare();
 	s2.afisare();
 
-	int nota = s[1];//preia nota de pe poz 1 din vectorul de note al obj s
+	int nota = s[1];
 	cout << "\nNota: " << nota;
 
-	s[1] = 10;//op index care permite si modificare
+	s[1] = 10;
 
-	string nume = s;//conversie implicita de la Student la string
+	string nume = s;
 
 
-	float sold = (float)s;//conversie explicita de la Student la float
+	float sold = (float)s;
 
-	int x, y, z=2;
+	int x, y, z = 2;
 	y = 2;
 	x = y + 4;
 	x = y += z;
-
-	//P1. identificare tip operator(binar sau unar)
-	//P2. identificare operanzi + ce returneaza
-	//P3. daca primul operand este de tipul clasei, meth se poate implementa in clasa (exista this)
-	//P3'. daca primul operand nu este de tipul clasei, meth se implementeaza in afara clasei
-
 	return 0;
 }
