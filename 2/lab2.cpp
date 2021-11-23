@@ -1,10 +1,5 @@
 #include<iostream>
-using namespace std;
-
-//Stancu Alexandra
-//Stanciu Andrei Alexandru
-//Stanica Florin-Alexandru
-
+using namespace std; 
 
 void cerinta1(int* v, int n) {
 	float medie = 0;
