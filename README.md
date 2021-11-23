@@ -5,4 +5,4 @@
 04_membriPointerFișier  
 06_opIndexareOpFunctieFișier  
 06_CubeFișier  
-07_OpIOFișier
+07_OpIOFișier  
